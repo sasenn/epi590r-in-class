@@ -1,3 +1,3 @@
-# EPI590R repo
+# EPI590R Repo
 
-This repository belongs to...
+This repository belongs to Siena Senn. 
