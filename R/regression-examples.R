@@ -33,6 +33,53 @@ tbl_uvregression(
 	method.args = list(family = binomial()),
 	exponentiate = TRUE)
 
+# create a univariate regression table
+
+
+tbl_uvregression(
+	nlsy,
+	x = sex_cat,
+	include = c(nsibs, sleep_wkdy, sleep_wknd, income),
+	method = lm)
+
+# fit a poisson regression
+
+poisson_model <- glm (nsibs ~ sleep_wkdy + sleep_wknd + income,
+											data = nlsy, family = poisson() )
+tbl_regression(
+	poisson_model,
+	intercept = TRUE,
+	exponentiate = TRUE,
+	label = list (
+		sleep_wkdy ~ "Sleep Weekday",
+		sleep_wknd ~ "Sleep Weekend",
+		income ~ "Income"
+	))
+
+# odds ratios instead of risk ratios
+
+logbinomial_model <- glm(glasses ~ eyesight_cat + sex_cat,
+											data = nlsy, family = binomial(link="log"))
+tbl_regression(
+	logbinomial_model,
+	intercept = TRUE,
+	label = list (
+		eyesight_cat = "Eyesight Category",
+		sex_cat = "Sex Category"))
+
+# fit a poisson regression instead of the log-binomial regression above
+
+poisson_modelabove <- glm(glasses ~ eyesight_cat + sex_cat,
+												 data = nlsy, family = poisson)
+
+# create new table for poisson regression
+
+eyes_poisson_table <- tbl_regression(poisson_modelabove,
+																		 exponentiate = TRUE,
+																		 tidy_fun = partial(tidy_robust, vcov = "HC1"))
+
+# make table comparing the log-binomial and log-poisson
+
 
 ## Multivariable regressions
 
